@@ -139,7 +139,7 @@ def process_image(image):
 def process_image_keras(image):
     width, height = image.size
     boxCoords = []
-    boxSize = 300
+    boxSize = width / 5
     boxCoords = boxCoordinates(width, height, boxSize)
     subImageVals = []
     rectangleCoord = []
