@@ -135,8 +135,15 @@ def process_image(image):
 
 # Take a PIL image
 def process_image_keras(image):
-    pass
-
+    width, height = im.size
+    boxCoords = []
+    boxSize = width/8
+    boxCoords = slidingBox.boxCoordinates(width, height, boxSize)
+    subImageVals = []
+    for i in range(len(boxCoords)):
+        subImage = image.crop(boxCoords[i][0],boxCoords[i][1],boxCoords[i][0] + boxSize, boxCoords[i][1] + boxSize)
+        subImageVals.append(process_subimage(subImage))
+    return subImageVals
 
 def process_subimage(image):
     with graph.as_default():
@@ -146,3 +153,25 @@ def process_subimage(image):
         result = model.predict(x)
         print(result)
         return result[0][0]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
