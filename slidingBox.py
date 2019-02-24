@@ -1,8 +1,6 @@
 
 
 
-
-
 def boxCoordinates(width, height, boxSize):
     ratioX = boxSize/width
     ratioY = boxSize/height
@@ -26,9 +24,9 @@ def boxCoordinates(width, height, boxSize):
         print("hi")
         boxCoord.append((width-boxSize,height-boxSize))
 
-    print (boxCoord)
+    return (boxCoord)
 
-boxCoordinates(10,20, 2.8)
+boxCoordinates(10,20, 3)
 
 
 
