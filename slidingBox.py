@@ -6,14 +6,14 @@ def boxCoordinates(width, height, boxSize):
     ratioY = boxSize/height
     isCoveredX = False   
     isCoveredY = False
-    numBoxesX = int((1/ratioX)*2 - 1)
-    numBoxesY = int((1/ratioY)*2 - 1)
+    numBoxesX = int((1/ratioX)*4 - 1)
+    numBoxesY = int((1/ratioY)*4 - 1)
     boxCoord = []
 
     for i in range(numBoxesX):
-        xCoord = int(boxSize/2 * i)
+        xCoord = int(boxSize/4 * i)
         for k in range(numBoxesY):
-            yCoord = int(boxSize/2 * k)
+            yCoord = int(boxSize/4 * k)
             if (xCoord + boxSize == width): 
                 isCoveredX = True
             if (yCoord + boxSize == height):
@@ -21,12 +21,10 @@ def boxCoordinates(width, height, boxSize):
             boxCoord.append((xCoord,yCoord))
 
     if (isCoveredX == False and isCoveredY == False):
-        print("hi")
         boxCoord.append((width-boxSize,height-boxSize))
 
     return (boxCoord)
 
-boxCoordinates(10,20, 3)
 
 
 

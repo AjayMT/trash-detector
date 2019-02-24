@@ -39,6 +39,8 @@ import tensorflow as tf
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator, img_to_array, array_to_img, load_img
 from slidingBox import boxCoordinates
+from PIL import Image,ImageDraw
+
 
 
 img_width, img_height = 256, 256
@@ -135,14 +137,33 @@ def process_image(image):
 
 # Take a PIL image
 def process_image_keras(image):
-    width, height = im.size
+    width, height = image.size
     boxCoords = []
-    boxSize = width/8
-    boxCoords = slidingBox.boxCoordinates(width, height, boxSize)
+    boxSize = 300
+    boxCoords = boxCoordinates(width, height, boxSize)
     subImageVals = []
     for i in range(len(boxCoords)):
-        subImage = image.crop(boxCoords[i][0],boxCoords[i][1],boxCoords[i][0] + boxSize, boxCoords[i][1] + boxSize)
-        subImageVals.append(process_subimage(subImage))
+        subImage = image.crop((boxCoords[i][0],boxCoords[i][1],boxCoords[i][0] + boxSize, boxCoords[i][1] + boxSize))
+        subImage = subImage.resize((256, 256), Image.ANTIALIAS)
+
+        val = process_subimage(subImage)
+        if(val >= 0.92):
+            smallerSubImage = image.crop((boxCoords[i][0]+boxSize*0.15,boxCoords[i][1]+boxSize*0.15,boxCoords[i][0] + boxSize*0.85, boxCoords[i][1] + boxSize*0.85))
+            smallerSubImage = smallerSubImage.resize((256, 256), Image.ANTIALIAS)
+            draw = ImageDraw.Draw(image) 
+            draw.line((boxCoords[i][0],boxCoords[i][1],boxCoords[i][0] + boxSize, boxCoords[i][1]), fill=128, width = 3)
+            draw.line((boxCoords[i][0],boxCoords[i][1],boxCoords[i][0], boxCoords[i][1] + boxSize), fill=128, width = 3)
+            draw.line((boxCoords[i][0] + boxSize, boxCoords[i][1], boxCoords[i][0] + boxSize, boxCoords[i][1] + boxSize), fill=128, width = 3)
+            draw.line((boxCoords[i][0], boxCoords[i][1] + boxSize, boxCoords[i][0] + boxSize, boxCoords[i][1] + boxSize), fill=128, width = 3)
+            #need to show this image
+
+            # val2 = process_subimage(smallerSubImage)
+            # if (val2 >= 0.5):
+            subImageVals.append((val,boxCoords[i][0],boxCoords[i][1]))
+    # open_cv_image = numpy.array(image) 
+    # Convert RGB to BGR 
+    # open_cv_image = open_cv_image[:, :, ::-1].copy() 
+    image.show()
     return subImageVals
 
 def process_subimage(image):
@@ -151,7 +172,7 @@ def process_subimage(image):
         x = x.reshape((1,) + x.shape)
         img_gen = ImageDataGenerator().flow(x)
         result = model.predict(x)
-        print(result)
+        # print(result)
         return result[0][0]
 
 
