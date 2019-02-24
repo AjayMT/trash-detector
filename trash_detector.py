@@ -33,6 +33,23 @@ import argparse
 import time
 import cv2
 
+from model_def import load_model
+from keras import backend as K
+import numpy as np
+from keras.preprocessing.image import ImageDataGenerator, img_to_array, array_to_img, load_img
+
+
+img_width, img_height = 256, 256
+
+if K.image_data_format() == 'channels_first':
+    input_shape = (3, img_width, img_height)
+else:
+    input_shape = (img_width, img_height, 3)
+
+model = load_model(input_shape, "4.h5")
+
+
+
 labelsPath = os.path.join(YOLO_PATH, 'coco.names')
 LABELS = open(labelsPath).read().strip().splitlines()
 
@@ -112,3 +129,17 @@ def process_image(image):
                         0.5, color, 2)
 
     return image
+
+# Take a PIL image
+def process_image_keras(image):
+
+    x = img_to_array(image)  # this is a Numpy array with shape (3, 256, 256)
+
+    x = x.reshape((1,) + x.shape)
+
+    img_gen = ImageDataGenerator().flow(x)
+
+    for x in img_gen:
+        result = model.predict(x)
+        print(result)
+        return round(result[0][0]) == 1
