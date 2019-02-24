@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
+from keras import regularizers
 
 def create_model(input_shape):
     model = Sequential()
@@ -27,10 +28,11 @@ def create_model(input_shape):
     model.add(Conv2D(32, (3, 3)))
     model.add(Activation('tanh'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    
+
 
     model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
-    model.add(Dense(64))
+    model.add(Dense(64, kernel_regularizer=regularizers.l2(0.01), activity_regularizer=regularizers.l1(0.01)))
+    model.add(Dense(64, kernel_regularizer=regularizers.l2(0.01), activity_regularizer=regularizers.l1(0.01)))
     model.add(Activation('tanh'))
     #model.add(Dense(4))
 
