@@ -35,6 +35,7 @@ import cv2
 
 from model_def import load_model
 from keras import backend as K
+import tensorflow as tf
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator, img_to_array, array_to_img, load_img
 
@@ -47,7 +48,7 @@ else:
     input_shape = (img_width, img_height, 3)
 
 model = load_model(input_shape, "4.h5")
-
+graph = tf.get_default_graph()
 
 
 labelsPath = os.path.join(YOLO_PATH, 'coco.names')
@@ -130,16 +131,13 @@ def process_image(image):
 
     return image
 
+
 # Take a PIL image
 def process_image_keras(image):
-
-    x = img_to_array(image)  # this is a Numpy array with shape (3, 256, 256)
-
-    x = x.reshape((1,) + x.shape)
-
-    img_gen = ImageDataGenerator().flow(x)
-
-    for x in img_gen:
+    with graph.as_default():
+        x = img_to_array(image)  # this is a Numpy array with shape (3, 256, 256)
+        x = x.reshape((1,) + x.shape)
+        img_gen = ImageDataGenerator().flow(x)
         result = model.predict(x)
         print(result)
-        return round(result[0][0]) == 1
+        return result[0][0]

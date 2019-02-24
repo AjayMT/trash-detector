@@ -6,6 +6,8 @@ from flask import send_from_directory
 from flask import make_response
 
 from trash_detector import process_image
+from trash_detector import process_image_keras
+from PIL import Image
 import cv2
 
 app = Flask(__name__, static_url_path='')
@@ -31,6 +33,17 @@ def post_root():
     response = make_response(buf.tobytes())
     response.headers['Content-Type'] = 'image/png'
     return response
+
+
+@app.route('/keras', methods=['POST'])
+def post_keras():
+    data = request.files.get('input_image', '').read()
+    nparr = np.frombuffer(data, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_ANYCOLOR)
+    pil_img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    pil_img = pil_img.resize((256, 256), Image.ANTIALIAS)
+    output = process_image_keras(pil_img)
+    return str(output)
 
 
 if __name__ == '__main__':
