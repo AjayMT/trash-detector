@@ -26,6 +26,9 @@ function clickEventHandler (isKeras) {
       document.getElementById(spanId).innerHTML = ''
       if (isKeras) {
         document.getElementById('result-keras').innerHTML = request.response
+        // let urlCreator = window.URL || window.webkitURL
+        // let imageURL = urlCreator.createObjectURL(request.response)
+        // document.getElementById('result-keras').src = imageURL
         return
       }
 
