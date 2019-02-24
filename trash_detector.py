@@ -38,6 +38,7 @@ from keras import backend as K
 import tensorflow as tf
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator, img_to_array, array_to_img, load_img
+from slidingBox import boxCoordinates
 
 
 img_width, img_height = 256, 256
@@ -134,6 +135,10 @@ def process_image(image):
 
 # Take a PIL image
 def process_image_keras(image):
+    pass
+
+
+def process_subimage(image):
     with graph.as_default():
         x = img_to_array(image)  # this is a Numpy array with shape (3, 256, 256)
         x = x.reshape((1,) + x.shape)
