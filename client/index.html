@@ -9,7 +9,12 @@
   </head>
 
   <body>
-    <div class="header-container"><h1 class="header">Garbage Collector</h1></div>
+    <div class="header-container">
+      <h1 class="header">Garbage Collector</h1>
+      <div id="logo-container">
+        <img src="/static/logo.png" id="logo" />
+      </div>
+    </div>
 
     <div id="upload-div">
       Upload an image:
@@ -23,7 +28,8 @@
     <div class="padding"></div>
 
     <div id="result-div">
-      <strong>Keras: </strong><span id="result-keras">No results</span><br />
+      <strong>Keras: </strong><span id="result-keras-span">No results</span><br />
+      <img id="result-keras" /><br />
       <strong>YOLO: </strong><span id="result-span">No results</span><br />
       <img id="result" />
     </div>

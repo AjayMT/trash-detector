@@ -7,7 +7,8 @@ function clickEventHandler (isKeras) {
   }
 
   let spanId = 'result-span'
-  if (isKeras) spanId = 'result-keras'
+  if (isKeras) spanId = 'result-keras-span'
+  console.log(document.getElementById('result-keras-span'))
   document.getElementById(spanId).innerHTML = 'Loading...'
 
   let fd = new FormData()
@@ -17,24 +18,16 @@ function clickEventHandler (isKeras) {
   let target = '/'
   if (isKeras) target = '/keras'
   request.open('POST', target, true);
-
-  if (isKeras) request.responseType = 'text';
-  else request.responseType = 'blob';
-
+  request.responseType = 'blob';
   request.onreadystatechange = () => {
     if (request.status === 200 && request.readyState == XMLHttpRequest.DONE) {
       document.getElementById(spanId).innerHTML = ''
-      if (isKeras) {
-        document.getElementById('result-keras').innerHTML = request.response
-        // let urlCreator = window.URL || window.webkitURL
-        // let imageURL = urlCreator.createObjectURL(request.response)
-        // document.getElementById('result-keras').src = imageURL
-        return
-      }
+      let imgId = 'result'
+      if (isKeras) imgId = 'result-keras'
 
       let urlCreator = window.URL || window.webkitURL
       let imageURL = urlCreator.createObjectURL(request.response)
-      document.getElementById('result').src = imageURL
+      document.getElementById(imgId).src = imageURL
     }
   }
   request.send(fd);

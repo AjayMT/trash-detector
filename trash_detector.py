@@ -157,7 +157,7 @@ def process_image_keras(image):
             draw = ImageDraw.Draw(image)
             rectangleCoord.append((boxX,boxY))
 
-            
+
             # val2 = process_subimage(smallerSubImage)
             # if (val2 >= 0.5):
             subImageVals.append((foundTrash,boxX,boxY))
@@ -165,11 +165,11 @@ def process_image_keras(image):
         width = 3
         for k in range(width):
             draw.rectangle(((rectangleCoord[j][0] + k,rectangleCoord[j][1] + k), (rectangleCoord[j][0]+ boxSize - k, rectangleCoord[j][1] + boxSize-k)), outline = 'black')
-    # open_cv_image = numpy.array(image) 
-    # Convert RGB to BGR 
-    # open_cv_image = open_cv_image[:, :, ::-1].copy() 
-    image.show()
-    return subImageVals
+    # open_cv_image = numpy.array(image)
+    # Convert RGB to BGR
+    # open_cv_image = open_cv_image[:, :, ::-1].copy()
+    return image
+
 
 def process_subimage(image):
     with graph.as_default():

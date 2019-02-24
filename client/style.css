@@ -24,3 +24,14 @@ body {
     border-style: solid;
     padding: 20px;
 }
+
+#logo-container {
+    position: absolute;
+    right: 10%;
+    top: 10%;
+}
+
+#logo {
+    width: 200px;
+    height: auto;
+}
