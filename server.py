@@ -41,8 +41,14 @@ def post_keras():
     nparr = np.frombuffer(data, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_ANYCOLOR)
     pil_img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    pil_img = pil_img.resize((256, 256), Image.ANTIALIAS)
+    # pil_img = pil_img.resize((256, 256), Image.ANTIALIAS)
     output = process_image_keras(pil_img)
+
+    # retval, buf = cv2.imencode('.png', output)
+    # response = make_response(buf.tobytes())
+    # response.headers['Content-Type'] = 'image/png'
+    # return response
+    
     return str(output)
 
 
