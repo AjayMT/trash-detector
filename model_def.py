@@ -31,7 +31,7 @@ def create_model(input_shape):
 
 
     model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
-    model.add(Dense(64, kernel_regularizer=regularizers.l2(0.01), activity_regularizer=regularizers.l1(0.01)))
+    model.add(Dense(64)) #kernel_regularizer=regularizers.l2(0.01), activity_regularizer=regularizers.l1(0.01)))
     model.add(Dense(64, kernel_regularizer=regularizers.l2(0.01), activity_regularizer=regularizers.l1(0.01)))
     model.add(Activation('tanh'))
     #model.add(Dense(4))
