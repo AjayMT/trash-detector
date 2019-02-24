@@ -1,12 +1,14 @@
 
-function clickEventHandler(isKeras) {
+function clickEventHandler (isKeras) {
   let image = document.getElementById('input_image')
   if (image.files.length === 0) {
     alert('Please upload a file')
     return
   }
 
-  document.getElementById('result-span').innerHTML = 'Loading...'
+  let spanId = 'result-span'
+  if (isKeras) spanId = 'result-keras'
+  document.getElementById(spanId).innerHTML = 'Loading...'
 
   let fd = new FormData()
   fd.append('input_image', image.files[0])
@@ -21,8 +23,7 @@ function clickEventHandler(isKeras) {
 
   request.onreadystatechange = () => {
     if (request.status === 200 && request.readyState == XMLHttpRequest.DONE) {
-      document.getElementById('result-span').innerHTML = ''
-
+      document.getElementById(spanId).innerHTML = ''
       if (isKeras) {
         document.getElementById('result-keras').innerHTML = request.response
         return
