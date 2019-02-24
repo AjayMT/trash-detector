@@ -142,24 +142,29 @@ def process_image_keras(image):
     boxSize = 300
     boxCoords = boxCoordinates(width, height, boxSize)
     subImageVals = []
+    rectangleCoord = []
     for i in range(len(boxCoords)):
-        subImage = image.crop((boxCoords[i][0],boxCoords[i][1],boxCoords[i][0] + boxSize, boxCoords[i][1] + boxSize))
+        boxX = boxCoords[i][0]
+        boxY = boxCoords[i][1]
+        subImage = image.crop((boxX,boxY ,boxX + boxSize, boxY + boxSize))
         subImage = subImage.resize((256, 256), Image.ANTIALIAS)
 
-        val = process_subimage(subImage)
-        if(val >= 0.92):
-            smallerSubImage = image.crop((boxCoords[i][0]+boxSize*0.15,boxCoords[i][1]+boxSize*0.15,boxCoords[i][0] + boxSize*0.85, boxCoords[i][1] + boxSize*0.85))
-            smallerSubImage = smallerSubImage.resize((256, 256), Image.ANTIALIAS)
-            draw = ImageDraw.Draw(image) 
-            draw.line((boxCoords[i][0],boxCoords[i][1],boxCoords[i][0] + boxSize, boxCoords[i][1]), fill=128, width = 3)
-            draw.line((boxCoords[i][0],boxCoords[i][1],boxCoords[i][0], boxCoords[i][1] + boxSize), fill=128, width = 3)
-            draw.line((boxCoords[i][0] + boxSize, boxCoords[i][1], boxCoords[i][0] + boxSize, boxCoords[i][1] + boxSize), fill=128, width = 3)
-            draw.line((boxCoords[i][0], boxCoords[i][1] + boxSize, boxCoords[i][0] + boxSize, boxCoords[i][1] + boxSize), fill=128, width = 3)
-            #need to show this image
+        foundTrash = process_subimage(subImage)
+        if(foundTrash >= 0.92):
+            # smallerSubImage = image.crop((boxCoords[i][0]+boxSize*0.15,boxCoords[i][1]+boxSize*0.15,boxCoords[i][0] + boxSize*0.85, boxCoords[i][1] + boxSize*0.85))
+            # smallerSubImage = smallerSubImage.resize((256, 256), Image.ANTIALIAS)
 
+            draw = ImageDraw.Draw(image)
+            rectangleCoord.append((boxX,boxY))
+
+            
             # val2 = process_subimage(smallerSubImage)
             # if (val2 >= 0.5):
-            subImageVals.append((val,boxCoords[i][0],boxCoords[i][1]))
+            subImageVals.append((foundTrash,boxX,boxY))
+    for j in range(len(rectangleCoord)):
+        width = 3
+        for k in range(width):
+            draw.rectangle(((rectangleCoord[j][0] + k,rectangleCoord[j][1] + k), (rectangleCoord[j][0]+ boxSize - k, rectangleCoord[j][1] + boxSize-k)), outline = 'black')
     # open_cv_image = numpy.array(image) 
     # Convert RGB to BGR 
     # open_cv_image = open_cv_image[:, :, ::-1].copy() 
